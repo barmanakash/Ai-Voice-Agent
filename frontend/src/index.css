@@ -1,0 +1,110 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  @apply bg-ink-950 text-zinc-200 font-sans antialiased;
+}
+
+/* Thin, unobtrusive scrollbars */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #2e2e36 transparent;
+}
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+*::-webkit-scrollbar-thumb {
+  background: #2e2e36;
+  border-radius: 8px;
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-medium
+      transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/60
+      disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  .btn-primary {
+    @apply btn bg-accent text-white hover:bg-accent-hover;
+  }
+  .btn-ghost {
+    @apply btn text-zinc-400 hover:bg-ink-700 hover:text-zinc-100;
+  }
+  .btn-outline {
+    @apply btn border border-ink-600 text-zinc-300 hover:bg-ink-700;
+  }
+  .input {
+    @apply w-full rounded-lg border border-ink-600 bg-ink-850 px-3 py-2 text-sm text-zinc-100
+      placeholder:text-zinc-500 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent/50;
+  }
+  .card {
+    @apply rounded-xl border border-ink-700 bg-ink-850;
+  }
+}
+
+/* Markdown rendering inside assistant messages */
+.markdown {
+  @apply text-[15px] leading-7 text-zinc-200;
+  overflow-wrap: anywhere;
+}
+.markdown > * + * {
+  @apply mt-3;
+}
+.markdown h1,
+.markdown h2,
+.markdown h3 {
+  @apply font-semibold text-zinc-50;
+}
+.markdown h1 {
+  @apply text-xl;
+}
+.markdown h2 {
+  @apply text-lg;
+}
+.markdown h3 {
+  @apply text-base;
+}
+.markdown ul {
+  @apply list-disc pl-6 space-y-1;
+}
+.markdown ol {
+  @apply list-decimal pl-6 space-y-1;
+}
+.markdown a {
+  @apply text-accent underline underline-offset-2 hover:text-accent-hover;
+}
+.markdown blockquote {
+  @apply border-l-2 border-ink-500 pl-4 text-zinc-400;
+}
+.markdown table {
+  @apply w-full border-collapse text-sm;
+}
+.markdown th,
+.markdown td {
+  @apply border border-ink-600 px-3 py-1.5 text-left;
+}
+.markdown th {
+  @apply bg-ink-800;
+}
+.markdown :not(pre) > code {
+  @apply rounded bg-ink-700 px-1.5 py-0.5 font-mono text-[13px] text-zinc-100;
+}
+.markdown pre {
+  @apply overflow-x-auto rounded-b-lg bg-ink-900 p-4 font-mono text-[13px] leading-6;
+}
+.markdown pre code.hljs {
+  background: transparent;
+  padding: 0;
+}
