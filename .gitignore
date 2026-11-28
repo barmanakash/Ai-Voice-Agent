@@ -15,6 +15,8 @@ dist/
 build/
 
 # Local data
+backend/data/
+.pytest_cache/
 backend/uploads/*
 backend/audio/*
 backend/chroma_db/

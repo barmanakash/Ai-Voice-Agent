@@ -25,6 +25,9 @@ class MongoManager:
         await self.db["conversations"].create_index([("updated_at", DESCENDING)])
         # Messages are always read per conversation in chronological order.
         await self.db["messages"].create_index([("conversation_id", ASCENDING), ("created_at", ASCENDING)])
+        # Documents: newest first, and one record per unique file content (duplicate prevention).
+        await self.db["documents"].create_index([("uploaded_at", DESCENDING)])
+        await self.db["documents"].create_index("content_hash", unique=True)
 
     async def close(self) -> None:
         try:

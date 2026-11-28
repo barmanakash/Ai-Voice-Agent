@@ -9,10 +9,13 @@ from app.core.config import get_config
 from app.core.errors import register_exception_handlers
 from app.core.logging import setup_logging
 from app.database.mongo import MongoManager
-from app.routes import chat, conversations, health, models, settings
+from app.routes import chat, conversations, documents, health, models, settings
 from app.schemas.settings import RuntimeSettings
 from app.services.chat_service import ChatService
 from app.services.conversation_service import ConversationService
+from app.services.document_pipeline import DocumentPipeline
+from app.services.document_service import DocumentService
+from app.services.file_storage import FileStorage
 from app.services.ollama_service import OllamaService
 from app.services.settings_service import SettingsService
 
@@ -40,6 +43,24 @@ async def lifespan(app: FastAPI):
 
     app.state.conversations = ConversationService(app.state.mongo.db)
     app.state.chat_service = ChatService(app.state.conversations, app.state.ollama, config.system_prompt)
+
+    app.state.documents = DocumentService(app.state.mongo.db)
+    app.state.file_storage = FileStorage(config.uploads_dir)
+    app.state.pipeline = DocumentPipeline(
+        app.state.documents,
+        app.state.file_storage,
+        app.state.settings_service,
+        indexer=None,  # Phase 6 plugs in embeddings + ChromaDB here
+        max_concurrent=config.max_concurrent_processing,
+    )
+    try:
+        interrupted = await app.state.documents.fail_unfinished(
+            "Processing was interrupted because the server restarted. Delete this document and upload it again."
+        )
+        if interrupted:
+            logger.warning("Marked %d interrupted document(s) as failed", interrupted)
+    except Exception as exc:
+        logger.warning("Could not check for interrupted documents: %s", type(exc).__name__)
 
     current = app.state.settings_service.get()
     status = await app.state.ollama.status(current.model)
@@ -78,5 +99,5 @@ async def log_requests(request: Request, call_next):
     return response
 
 
-for router in (health.router, models.router, settings.router, conversations.router, chat.router):
+for router in (health.router, models.router, settings.router, conversations.router, chat.router, documents.router):
     app.include_router(router, prefix="/api")

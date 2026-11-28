@@ -45,6 +45,18 @@ class ConflictError(AppError):
     status_code = 409
 
 
+class BadRequestError(AppError):
+    status_code = 400
+
+
+class FileTooLargeError(AppError):
+    status_code = 413
+
+
+class UnsupportedFileTypeError(AppError):
+    status_code = 415
+
+
 def describe_exception(exc: Exception) -> str:
     """Turn any exception into a safe, human readable message (used for in-stream errors)."""
     if isinstance(exc, AppError):

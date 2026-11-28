@@ -4,6 +4,9 @@ from app.core.config import Config, get_config
 from app.database.mongo import MongoManager
 from app.services.chat_service import ChatService
 from app.services.conversation_service import ConversationService
+from app.services.document_pipeline import DocumentPipeline
+from app.services.document_service import DocumentService
+from app.services.file_storage import FileStorage
 from app.services.ollama_service import OllamaService
 from app.services.settings_service import SettingsService
 
@@ -26,6 +29,18 @@ def get_conversations(request: Request) -> ConversationService:
 
 def get_chat_service(request: Request) -> ChatService:
     return request.app.state.chat_service
+
+
+def get_documents(request: Request) -> DocumentService:
+    return request.app.state.documents
+
+
+def get_file_storage(request: Request) -> FileStorage:
+    return request.app.state.file_storage
+
+
+def get_pipeline(request: Request) -> DocumentPipeline:
+    return request.app.state.pipeline
 
 
 def get_app_config() -> Config:

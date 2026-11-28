@@ -63,7 +63,7 @@ The dev server proxies `/api/*` to `VITE_BACKEND_URL` (default `http://localhost
 - [x] Phase 2 — React frontend and chatbot UI (written, needs first run/test)
 - [x] Phase 3 — FastAPI backend and Ollama integration (health, models, settings, stateless `/api/chat`; needs first run/test)
 - [x] Phase 4 — Conversation history and streaming (MongoDB, `/api/chat/stream`, regenerate, rename, delete, clear; needs first run/test)
-- [ ] Phase 5 — Document upload and processing
+- [x] Phase 5 — Document upload and processing (validation, PDF/DOCX/TXT/MD extraction, cleaning, chunking, status tracking, delete; documents are chunked but not yet searchable until Phase 6; needs first run/test)
 - [ ] Phase 6 — ChromaDB and RAG
 - [ ] Phase 7 — Speech-to-text
 - [ ] Phase 8 — Text-to-speech
